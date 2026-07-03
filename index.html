@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pre-Season">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0F1420">
+<title>Pre-Season · Mors-Thy Akademi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0F1420; --surface:#182031; --surface2:#202B41; --line:#2B3852;
+  --orange:#FF7A1F; --orange-soft:rgba(255,122,31,.14);
+  --blue:#5B8DEF; --green:#3ECF7A; --green-soft:rgba(62,207,122,.12);
+  --text:#EDF1F8; --muted:#93A0B8; --faint:#6B7890;
+  --r:14px;
+  --disp:"Barlow Condensed",-apple-system,sans-serif;
+  --body:"Barlow",-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--body);
+  font-size:16px;line-height:1.45;padding-bottom:60px;
+  padding-top:env(safe-area-inset-top)}
+a{color:var(--blue)}
+button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer}
+
+/* ---------- header ---------- */
+header{padding:18px 18px 10px}
+.eyebrow{font-family:var(--disp);font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;font-size:13px;color:var(--orange)}
+h1{font-family:var(--disp);font-weight:800;font-size:34px;line-height:1.05;
+  text-transform:uppercase;letter-spacing:.01em}
+.sub{color:var(--muted);font-size:14px;margin-top:2px}
+
+/* ---------- day scroller ---------- */
+nav{position:sticky;top:0;z-index:10;background:linear-gradient(var(--bg) 82%,transparent);
+  padding:8px 0 12px}
+.days{display:flex;gap:8px;overflow-x:auto;padding:0 18px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.wk{flex:0 0 auto;align-self:center;font-family:var(--disp);font-weight:700;
+  font-size:12px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase;
+  writing-mode:vertical-rl;transform:rotate(180deg);padding:4px 0}
+.chip{flex:0 0 auto;min-width:52px;padding:8px 6px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--line);text-align:center}
+.chip .d{font-family:var(--disp);font-weight:700;font-size:12px;
+  letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.chip .n{font-family:var(--disp);font-weight:800;font-size:20px;line-height:1.1}
+.chip .dot{width:6px;height:6px;border-radius:50%;margin:3px auto 0;background:transparent}
+.chip.free .dot{background:var(--green)}
+.chip.train .dot{background:var(--orange)}
+.chip.done .n{color:var(--green)}
+.chip.active{background:var(--orange);border-color:var(--orange)}
+.chip.active .d,.chip.active .n{color:#14100B}
+.chip.active .dot{background:#14100B}
+.chip.today:not(.active){border-color:var(--orange)}
+.chip:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* ---------- day view ---------- */
+main{padding:6px 18px 0}
+.dayhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:8px 0 4px}
+.dayhead h2{font-family:var(--disp);font-weight:800;font-size:28px;text-transform:uppercase}
+.tag{font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--orange);white-space:nowrap}
+.tag.free{color:var(--green)}
+.meta{color:var(--muted);font-size:14px;margin-bottom:12px}
+.progress{height:6px;border-radius:3px;background:var(--surface2);overflow:hidden;margin:0 0 16px}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--orange),#FFB367);
+  border-radius:3px;transition:width .3s ease}
+
+/* ---------- timeline blocks ---------- */
+.block{position:relative;margin:0 0 12px;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.block.done{border-color:rgba(62,207,122,.5)}
+.bhead{display:flex;align-items:center;gap:12px;width:100%;padding:14px;text-align:left}
+.puck{flex:0 0 34px;height:34px;border-radius:50%;background:var(--orange-soft);
+  color:var(--orange);display:grid;place-items:center;font-family:var(--disp);
+  font-weight:800;font-size:16px}
+.block.done .puck{background:var(--green-soft);color:var(--green)}
+.bt{flex:1;min-width:0}
+.bt .t{font-family:var(--disp);font-weight:700;font-size:19px;text-transform:uppercase;
+  letter-spacing:.02em;line-height:1.15}
+.bt .s{color:var(--muted);font-size:13px}
+.chev{color:var(--faint);transition:transform .2s}
+.block.open .chev{transform:rotate(180deg)}
+.bbody{display:none;padding:0 14px 14px;border-top:1px solid var(--line)}
+.block.open .bbody{display:block}
+.note{background:var(--surface2);border-radius:10px;padding:10px 12px;
+  font-size:14px;color:var(--muted);margin:12px 0}
+.note b{color:var(--text)}
+
+/* ---------- exercise rows ---------- */
+.exgroup{margin-top:12px}
+.gh{font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+.ex{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.ex:last-child{border-bottom:none}
+.cb{flex:0 0 24px;height:24px;margin-top:2px;border-radius:7px;
+  border:2px solid var(--faint);display:grid;place-items:center}
+.cb svg{opacity:0;width:14px;height:14px}
+.ex.checked .cb{background:var(--green);border-color:var(--green)}
+.ex.checked .cb svg{opacity:1}
+.ex.checked .xt .name{color:var(--muted);text-decoration:line-through}
+.cb:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.xt{flex:1;min-width:0}
+.name{font-weight:600;font-size:15.5px}
+.dose{display:inline-block;font-family:var(--disp);font-weight:700;font-size:13px;
+  letter-spacing:.04em;color:var(--orange);background:var(--orange-soft);
+  border-radius:6px;padding:1px 7px;margin:3px 6px 3px 0;text-transform:uppercase}
+.dose.alt{color:var(--blue);background:rgba(91,141,239,.12)}
+.desc{color:var(--muted);font-size:13.5px;margin-top:2px}
+.vid{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;
+  color:var(--blue);text-decoration:none;margin-top:4px}
+.vid svg{width:14px;height:14px}
+
+/* ---------- free day / camp ---------- */
+.rest{margin:26px 0;text-align:center;padding:34px 20px;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r)}
+.rest .big{font-family:var(--disp);font-weight:800;font-size:30px;
+  text-transform:uppercase;color:var(--green)}
+.rest p{color:var(--muted);margin-top:6px;font-size:14.5px}
+.rest.camp .big{color:var(--orange)}
+
+footer{padding:26px 18px 10px;color:var(--faint);font-size:12.5px;text-align:center}
+
+
+/* ---------- overblik ---------- */
+.ovtoggle{display:inline-flex;align-items:center;gap:7px;margin-top:12px;
+  padding:9px 16px;border-radius:999px;background:var(--surface);
+  border:1px solid var(--line);font-family:var(--disp);font-weight:700;
+  font-size:14px;letter-spacing:.07em;text-transform:uppercase;color:var(--text)}
+.ovtoggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.ovcard{background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:14px;margin-bottom:12px}
+.ovhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.ovhead .t{font-family:var(--disp);font-weight:800;font-size:20px;text-transform:uppercase}
+.ovhead .p{font-family:var(--disp);font-weight:700;color:var(--orange);font-size:15px}
+.ovbar{height:5px;border-radius:3px;background:var(--surface2);overflow:hidden;margin:0 0 12px}
+.ovbar i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),#FFB367)}
+.ovcard.total .ovbar i{background:linear-gradient(90deg,var(--green),#8FE8B4)}
+.ovgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.ovday{border:1px solid var(--line);border-radius:10px;padding:7px 2px 6px;
+  text-align:center;background:var(--surface2)}
+.ovday .w{font-family:var(--disp);font-weight:700;font-size:10px;
+  letter-spacing:.08em;color:var(--faint);text-transform:uppercase;display:block}
+.ovday .n{font-family:var(--disp);font-weight:800;font-size:17px;display:block;line-height:1.15}
+.ovday .pc{font-size:10.5px;font-weight:600;color:var(--muted);display:block}
+.ovday.full{background:var(--green-soft);border-color:rgba(62,207,122,.55)}
+.ovday.full .pc{color:var(--green)}
+.ovday.part .pc{color:var(--orange)}
+.ovday.rest{opacity:.55}
+.ovday.today{border-color:var(--orange);border-width:2px;padding:6px 1px 5px}
+.ovday:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.ovhint{color:var(--faint);font-size:12.5px;text-align:center;margin:4px 0 14px}
+
+
+/* ---------- tællere ---------- */
+.dprow{display:flex;justify-content:space-between;align-items:baseline;
+  font-size:13px;color:var(--muted);margin-bottom:6px}
+.dprow b{font-family:var(--disp);font-weight:700;font-size:15px;
+  letter-spacing:.03em;color:var(--orange)}
+.dprow.alldone b{color:var(--green)}
+.bcount{flex:0 0 auto;font-family:var(--disp);font-weight:700;font-size:13px;
+  color:var(--muted);background:var(--surface2);border-radius:999px;
+  padding:3px 9px;letter-spacing:.03em}
+.block.done .bcount{color:var(--green);background:var(--green-soft)}
+.bprog{height:3px;background:var(--surface2)}
+.bprog i{display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--orange),#FFB367);transition:width .3s ease}
+.block.done .bprog i{background:var(--green)}
+
+
+/* ---------- embedded video ---------- */
+button.vid{padding:0}
+.ytwrap{position:relative;margin-top:10px;border-radius:10px;overflow:hidden;
+  aspect-ratio:16/9;background:#000;max-width:420px;border:1px solid var(--line)}
+.ytwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+.ytext{display:inline-block;font-size:12.5px;color:var(--faint);margin-top:5px;text-decoration:none}
+.ytext:hover{color:var(--blue)}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Mors-Thy Håndbold Akademi</div>
+  <h1>Pre-Season 2026</h1>
+  <div class="sub">Uge 28–30 · Camp starter mandag 27. juli</div>
+  <button class="ovtoggle" id="ovtoggle" aria-pressed="false">Se ugeoverblik</button>
+</header>
+
+<nav><div class="days" id="days"></div></nav>
+<main id="main"></main>
+
+<footer>Hak øvelserne af undervejs — din fremgang gemmes på telefonen.<br>
+RIR = gentagelser du skal have tilbage i tanken, når sættet slutter.</footer>
+
+<script>
+"use strict";
+
+/* ---------------- storage (localStorage m. fallback) ---------------- */
+const mem = {};
+const store = {
+  get(k){ try{ return localStorage.getItem(k); }catch(e){ return mem[k] ?? null; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){ mem[k]=v; } }
+};
+
+/* ---------------- programdata ---------------- */
+const YTICON = `<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M23 7.1a4 4 0 0 0-2.8-2.9C18.2 3.6 12 3.6 12 3.6s-6.2 0-8.2.6A4 4 0 0 0 1 7.1 42 42 0 0 0 .5 12 42 42 0 0 0 1 16.9a4 4 0 0 0 2.8 2.8c2 .7 8.2.7 8.2.7s6.2 0 8.2-.7a4 4 0 0 0 2.8-2.8A42 42 0 0 0 23.5 12 42 42 0 0 0 23 7.1zM9.8 15.5v-7l6.2 3.5-6.2 3.5z"/></svg>`;
+const ytParse = u => {
+  const id = (u.match(/[?&]v=([\w-]{11})/)||[])[1];
+  const t = u.match(/[?&](?:t|time_continue)=(\d+)/);
+  return {id, start: t ? +t[1] : 0};
+};
+const yt = u => {
+  const {id, start} = ytParse(u);
+  if(!id) return "";
+  return `<button class="vid" data-yt="${id}" data-start="${start}"
+    aria-expanded="false">${YTICON}Se video</button><div class="ytslot"></div>`;
+};
+
+const OPVARM_STYRKE = "5 min let cykel/løb, derefter 1×8 af: cossack squat · serratus push up · skulderrotationer ×2 med 1 kg håndvægt · lunges med overkropsrotation ×2.";
+const OPVARM_LOB = "5 min let løb med stigende fart + dynamisk opvarmning (se reference-blokken øverst på dagen).";
+
+const PROGRAMS = {
+
+styrke1:{ title:"Styrkeprogram 1", sub:"Vægte · ca. 90 min",
+  note:`<b>Opvarmning:</b> ${OPVARM_STYRKE}<br><b>Supersæt:</b> lav A-øvelsen, gå direkte til B-øvelsen, og hold så pausen — det er 1 runde. Antal runder står ved hvert supersæt. Hvor A og B ikke har lige mange sæt, springes den korte øvelse bare over i de sidste runder.`,
+  groups:[
+   {h:"Supersæt 1 · 4 runder — bænkpres kun i de 3 første", ex:[
+    {n:"Squat", d:["10-8-8-6","RIR 2-3","Pause: ingen"], t:"Spænd i core, brystet frem, hovedet højt. Knæled til under 90°.", v:"https://www.youtube.com/watch?v=SW_C1A-rejs&t=22s"},
+    {n:"Skrå bænkpres med håndvægte", d:["3 × 8","RIR 2","Pause: 90 sek"], t:"Liggende på bænk med let bøjede arme. Sænk til overarmen er ca. vandret.", v:"https://www.youtube.com/watch?v=eozdVDA78K0"}]},
+   {h:"Supersæt 2 · 3 runder", ex:[
+    {n:"One arm row", d:["3 × 8 pr. arm","RIR 2","Pause: ingen"], t:"Knæ og arm på bænk. Spænd i core og træk kontrolleret til brystet."},
+    {n:"Et-bens dødløft", d:["3 × 6 pr. ben","RIR 2","Pause: 90 sek"], t:"Vægt i samme hånd som standben. Roligt ned, eksplosivt knæoptræk op — hold balancen.", v:"https://www.youtube.com/watch?v=b9bHy3ojQWA"}]},
+   {h:"Supersæt 3 · 4 runder — Y-W-T-M kun i de 3 første", ex:[
+    {n:"Y-W-T-M", d:["3 × 4 af hver","RIR 2","Pause: ingen"], t:"Stående med brystet mod gulvet, spænd op i core.", v:"https://www.youtube.com/watch?v=1RsEmC4Us9c"},
+    {n:"Boxjump", d:["4 × 6","Kropsvægt","Pause: 90 sek"], t:"Eksplosivt hop fra stående, stabil landing før du går ned igen.", v:"https://www.youtube.com/watch?v=k7dmYdknbac"}]},
+   {h:"Supersæt 4 · 3 runder", ex:[
+    {n:"Hip thrust med vægtskive", d:["3 × 8","RIR 2","Pause: ingen"], t:"Eksplosivt op, hold 1 sekund på toppen. Vægten ligger på hoften.", v:"https://www.youtube.com/watch?v=SEdqd1n0cvg"},
+    {n:"Russian twist", d:["3 × 10 pr. side","Medicinbold","Pause: 60 sek"], t:"Siddende med benene løftet fra jorden.", v:"https://www.youtube.com/watch?v=2_MsoqTpIJ8"}]},
+   {h:"Ekstra (hvis overskud)", ex:[
+    {n:"1–2 valgfrie øvelser", d:["Valgfrit"], t:"Vælg selv — fx noget du vil blive bedre til."}]}
+  ]},
+
+styrke2:{ title:"Styrkeprogram 2", sub:"Vægte · ca. 90 min",
+  note:`<b>Opvarmning:</b> ${OPVARM_STYRKE}<br><b>Supersæt:</b> A-øvelse → direkte til B-øvelse → pause = 1 runde. Antal runder står ved hvert supersæt.`,
+  groups:[
+   {h:"Supersæt 1 · 4 runder — diagonalløft kun i de 3 første", ex:[
+    {n:"Bænkpres", d:["10-8-8-6","RIR 2","Pause: ingen"], t:"Spænd godt op i kroppen og saml skulderbladene.", v:"https://www.youtube.com/watch?v=uhOr-YfMaL4"},
+    {n:"Diagonalløft", d:["3 × 8 pr. side","Kropsvægt","Pause: 60 sek"], t:"På hænder og fødder. Roligt og kontrolleret, fokus på balancen.", v:"https://www.youtube.com/watch?v=XGcOoiIGoOY"}]},
+   {h:"Supersæt 2 · 3 runder", ex:[
+    {n:"Dødløft", d:["3 × 8","RIR 4-5","Pause: ingen"], t:"Spænd i core, hold brystet fremskudt og kig fremad.", v:"https://www.youtube.com/watch?v=op9kVnSso6Q"},
+    {n:"Skrå medicinboldkast", d:["3 × 5 pr. side","RIR 2-3","Pause: 1 min"], t:"Kast op ad en mur eller til en makker."}]},
+   {h:"Supersæt 3 · 4 runder", ex:[
+    {n:"Liggende træk i TRX", d:["4 × 10","Kropsvægt","Pause: ingen"], t:"Stiv som en planke, smalt træk, hænderne vandret hele vejen.", v:"https://www.youtube.com/watch?time_continue=70&v=BE--3-wScdk"},
+    {n:"Step up med håndvægte", d:["4 × 4 pr. ben","RIR 2-3","Pause: 60 sek"], t:"Håndvægte i begge hænder. Skiftevis højre/venstre ben og skiftevis skulderpres.", v:"https://www.youtube.com/watch?v=paGUT49Rvlo"}]},
+   {h:"Supersæt 4 · 4 runder — valgfri øvelse kun i de 3 første", ex:[
+    {n:"Neutral grip pull up", d:["4 × 8","RIR 0-1","Pause: ingen"], t:"Evt. med elastik under benene eller makkerhjælp.", v:"https://www.youtube.com/watch?v=ABdqXtQ3IMQ"},
+    {n:"Valgfri øvelse", d:["3 × 8","Pause: 60 sek"], t:"Vælg selv."}]}
+  ]},
+
+loeb1:{ title:"Løbeprogram 1", sub:"Korte intervaller · ca. 50 min",
+  note:`<b>Opvarmning:</b> ${OPVARM_LOB}<br><b>Afslutning:</b> 5 min let løb + valgfri udstrækning.`,
+  groups:[{h:"Intervaller", ex:[
+    {n:"Korte intervaller", d:["8 × 30 sek","90 % af maxpuls"], t:"30 sekunders aktiv gang mellem hver."},
+    {n:"Vandpause", d:["2 min"]},
+    {n:"Sidestep-intervaller", d:["6 × 30 sek","90 %"], t:"Skift side hver 10 meter. 30 sekunders pause mellem hver."},
+    {n:"Vandpause", d:["2 min"]},
+    {n:"Max-spurter", d:["12 × 15 sek","Maxfart"], t:"15 sekunders pause mellem hver."}]}]},
+
+loeb2:{ title:"Løbeprogram 2", sub:"Lange intervaller · ca. 50 min",
+  note:`<b>Opvarmning:</b> ${OPVARM_LOB}<br><b>Afslutning:</b> 5 min let løb + valgfri udstrækning.`,
+  groups:[{h:"Intervaller", ex:[
+    {n:"Lange intervaller", d:["5 × 3 min","90 % af maxpuls"], t:"3 minutters aktiv gang mellem hver."},
+    {n:"Vandpause", d:["2 min"]},
+    {n:"Mellemintervaller", d:["6 × 45 sek","90 %"], t:"30 sekunders aktiv gang mellem hver."},
+    {n:"Vandpause", d:["2 min"]},
+    {n:"L-løb", d:["6 pr. side"], t:"15 m spurt ligeud, rund keglen, 5 m spurt til siden."}]}]},
+
+loeb3:{ title:"Løbeprogram 3", sub:"Tempo · ca. 50 min",
+  note:`<b>Opvarmning:</b> ${OPVARM_LOB}<br><b>Afslutning:</b> 5 min let løb + valgfri udstrækning.`,
+  groups:[{h:"Intervaller", ex:[
+    {n:"Tempointervaller", d:["4 × 4 min","80–90 %"], t:"1 minuts aktiv gang mellem hver."},
+    {n:"Vandpause", d:["2 min"]},
+    {n:"30-20-10 løb", d:["6 runder"], t:"30 sek jog (50 %) → 20 sek fart (80 %) → 10 sek spurt (100 %)."}]}]},
+
+trappe:{ title:"Trappespring", sub:"Efter løbeprogram 3 · ca. 10 min",
+  note:"Find en trappe eller skråning. Spring op med fokus på eksplosivitet og stabil landing — gå roligt ned.",
+  groups:[{h:"Spring", ex:[
+    {n:"Trappespring", d:["4–6 opture"], t:"Skift mellem samlede hop og et-bens hop. Fuld pause mellem opturene."}]}]},
+
+fastfeet:{ title:"Fast feet / agility", sub:"Vælg 3 af 8 øvelser · ca. 20 min",
+  note:"<b>Opvarmning:</b> 5 min let løb + dynamisk opvarmning — spring over, hvis du lige har trænet. Du vælger selv 3 øvelser pr. gang, men alle 8 skal være prøvet i løbet af perioden.<br><b>OBS:</b> Akademiets dokument beskriver ikke øvelserne — beskrivelserne her er vejledende. Er du i tvivl om en øvelse, så få den vist på Akademiet og gør som træneren siger.",
+  groups:[{h:"Vælg 3 øvelser", ex:[
+    {n:"Fast feet and box jump", d:["4 sæt × 3/3 pr. ben"],
+     t:"Trip hurtigt på stedet på forfødderne (fast feet) i 2–3 sekunder — hop så eksplosivt op på en kasse og land stabilt på ét ben. Gå roligt ned. 3 landinger på hvert ben pr. sæt."},
+    {n:"Frem/tilbage-hop over hække (to ben)", d:["4 sæt × 1 runde"],
+     t:"Stil 4–6 små hække på række. Hop samlet frem over dem én ad gangen, og hop derefter baglæns tilbage. Frem + tilbage = 1 runde. Kort kontakt med gulvet, brug armene."},
+    {n:"Seated plyo til finte", d:["4 sæt × 3/3 pr. side"],
+     t:"Sid på en kasse/bænk. Rejs dig eksplosivt uden armhjælp og gå direkte ud i en håndbold-finte til siden (kropsfinte + retningsskift). 3 gange til hver side."},
+    {n:"To-bens hop over hække → sidehop", d:["4 sæt × 1 runde"],
+     t:"Hop samlet sidelæns over hækkene ned langs rækken, og hop samme vej tilbage. Hold hoften høj og landingerne korte og fjedrende."},
+    {n:"Sidehop på ét ben, små hække", d:["4 sæt × 1 runde"],
+     t:"Hop sidelæns på ét ben over en række helt lave hække — retur på det andet ben. Stabil landing på hvert hop, knæet må ikke falde indad."},
+    {n:"Stop and go med stepbænk", d:["4 sæt × 3/3 pr. ben"],
+     t:"Sprint 2–3 skridt frem mod stepbænken, træd eksplosivt op på den og 'frys' landingen i 1–2 sekunder med bøjet knæ — sæt så eksplosivt af videre. 3 gange pr. ben."},
+    {n:"Sidejump med steptouch", d:["4 sæt × 3/3 pr. ben"],
+     t:"Hop langt til siden, land på det yderste ben og lav en hurtig steptouch (sæt det andet ben kort i) — hop straks tilbage den anden vej. 3 hop til hver side pr. sæt."},
+    {n:"Bulgarian split sideways jump", d:["3 sæt × 4/4 pr. ben"],
+     t:"Stå i bulgarsk split (bagerste fod oppe på bænk/kasse). Sænk dig ned og hop eksplosivt op, mens forreste fod lander en anelse forskudt til siden — hop tilbage igen. 4 hop pr. ben."}]}]},
+
+kast:{ title:"Kasteprogram", sub:"Før styrke/løb · ca. 15 min",
+  note:"Brug <b>2 ens bolde</b> (håndbolde, hårde skumbolde eller tennisbolde). Supersæt: a-øvelse → direkte til b-øvelse → 30 sek pause. <b>2 runder af hvert par.</b>",
+  groups:[
+   {h:"Par 1 · 2 runder", ex:[
+    {n:"1a · Dribl med en bold i hver hånd", d:["20 sekunder"]},
+    {n:"1b · Lette afleveringer", d:["25 pr. arm"], t:"Armen over 90°."}]},
+   {h:"Par 2 · 2 runder", ex:[
+    {n:"2a · Afleveringer med bold i hver hånd", d:["30 pr. arm"], t:"Op ad mur eller til makker."},
+    {n:"2b · Stående kast", d:["10 pr. arm","80–90 % kraft"], t:"Armen over 90°."}]},
+   {h:"Par 3 · 2 runder", ex:[
+    {n:"3a · Afleveringer i forskellige armpositioner", d:["30 pr. arm"], t:"Skift armposition undervejs."},
+    {n:"3b · Skud", d:["10 pr. arm","90–100 % kraft"], t:"Armen i ca. 90°."}]}
+  ]},
+
+core:{ title:"Coreprogram", sub:"Fridag eller efter træning · ca. 15 min",
+  note:"Supersæt: a-øvelse → direkte til b-øvelse → 60 sek pause. <b>2 runder af hvert par.</b>",
+  groups:[
+   {h:"Par 1 · 2 runder", ex:[
+    {n:"1a · Diagonalløft", d:["8 pr. side"], t:"På alle fire. Modsat arm og ben, hold 2 sek i toppen."},
+    {n:"1b · Sideliggende hofteløft + benløft", d:["8 pr. side"], t:"Hoften ned til gulv, op i sideplanke, løft det øverste ben."}]},
+   {h:"Par 2 · 2 runder", ex:[
+    {n:"2a · Mountain climbers på albuer", d:["10 pr. side"], t:"Lige krop, knæ helt op til albuen. Langsomt tempo."},
+    {n:"2b · Larven", d:["8 gentagelser"], t:"Kravl så langt frem på hænderne som muligt, hold presset 2 sek i bunden."}]},
+   {h:"Par 3 · 2 runder", ex:[
+    {n:"3a · Skrå foldekniv", d:["10 pr. side"], t:"Eksplosivt modsat arm til ben — overkrop og ben fri af gulvet hver gang."},
+    {n:"3b · 1-bens bækkenløft", d:["8 pr. ben"], t:"Spænd baglår og baller. Lænden i gulvet i bunden, hoften højt i toppen. Langsomt tempo."}]}
+  ]},
+
+opvarm:{ title:"Dynamisk opvarmning", sub:"Reference · før løb og fast feet · ca. 8 min", ref:true,
+  note:"Fast del af opvarmningen — laves efter 5 min let løb.",
+  groups:[{h:"Øvelser", ex:[
+    {n:"Siddende med strakte ben", d:["12 pr. ben"], t:"Højre hånd til yderside af venstre fod og omvendt. Vip roligt frem og tilbage."},
+    {n:"Rul til V-siddende", d:["10 gentagelser"], t:"Rul bagover og frem til bredsiddende, tryk overkroppen fremad. Keepere laver i stedet rullende udfald 6 pr. side."},
+    {n:"Bensving med siden til væg", d:["10 pr. ben"], t:"Sving benet frem og tilbage så stort som muligt — stå på forfoden på det andet ben."},
+    {n:"Bensving med front mod væg", d:["10 pr. ben"], t:"Før benet fra side til side så stort som muligt."},
+    {n:"Hop på stedet", d:["3 × 15 sek","30 sek pause"], t:"På forfoden og så højt som muligt — kun læg og aktive fodled."},
+    {n:"Siksak-hink på ét ben", d:["8 m pr. ben"], t:"Hurtigst muligt over fx en streg — først side til side, så baglæns/forlæns. Begge ben."}]}]}
+};
+
+/* ---------------- ugeplan ---------------- */
+const DAYS = [
+ {d:"2026-07-06", w:28, blocks:["kast","styrke1","loeb1"], time:"ca. 2½ time"},
+ {d:"2026-07-07", w:28, blocks:["styrke2","fastfeet"], time:"ca. 2 timer", ff:"1 af 2"},
+ {d:"2026-07-08", w:28, free:true, blocks:["core"], time:"15 min"},
+ {d:"2026-07-09", w:28, blocks:["kast","loeb2"], time:"ca. 1 time"},
+ {d:"2026-07-10", w:28, blocks:["styrke1"], time:"ca. 1½ time"},
+ {d:"2026-07-11", w:28, blocks:["loeb3","fastfeet"], time:"ca. 1¼ time", ff:"2 af 2"},
+ {d:"2026-07-12", w:28, free:true, blocks:[], rest:"Helt fri", restp:"Lad kroppen lade op — du har fortjent det."},
+
+ {d:"2026-07-13", w:29, blocks:["kast","styrke1","loeb1"], time:"ca. 2½ time"},
+ {d:"2026-07-14", w:29, blocks:["styrke2","fastfeet"], time:"ca. 2 timer", ff:"1 af 3"},
+ {d:"2026-07-15", w:29, free:true, blocks:["core"], time:"15 min"},
+ {d:"2026-07-16", w:29, blocks:["kast","loeb2","styrke1"], time:"ca. 2½ time"},
+ {d:"2026-07-17", w:29, blocks:["loeb3","trappe","fastfeet"], time:"ca. 1½ time", ff:"2 af 3"},
+ {d:"2026-07-18", w:29, free:true, blocks:[], rest:"Helt fri", restp:"Restitution er også træning."},
+ {d:"2026-07-19", w:29, blocks:["loebvalg","fastfeet"], time:"ca. 1–2 timer", ff:"3 af 3"},
+
+ {d:"2026-07-20", w:30, blocks:["kast","styrke1","loeb1"], time:"ca. 2½ time"},
+ {d:"2026-07-21", w:30, blocks:["styrke2","fastfeet"], time:"ca. 2 timer", ff:"1 af 3"},
+ {d:"2026-07-22", w:30, free:true, blocks:["core"], time:"15 min"},
+ {d:"2026-07-23", w:30, blocks:["kast","loeb2","styrke1"], time:"ca. 2½ time"},
+ {d:"2026-07-24", w:30, blocks:["loeb3","trappe","fastfeet"], time:"ca. 1½ time", ff:"2 af 3"},
+ {d:"2026-07-25", w:30, blocks:["loeblet","fastfeet"], time:"ca. 1 time", ff:"3 af 3"},
+ {d:"2026-07-26", w:30, free:true, blocks:[], rest:"Mød ind på Akademiet", restp:"Ingen selvtræning i dag — pak tasken og kom udhvilet. Camp starter i morgen!", camp:true}
+];
+
+/* valgfrit/let løb som pseudo-programmer */
+PROGRAMS.loebvalg = { title:"Valgfrit løbeprogram", sub:"Eller Styrkeprogram 2 · 50–90 min",
+  note:"Vælg selv ét af de tre løbeprogrammer — eller kør Styrkeprogram 2, hvis benene trænger til en pause fra løb.",
+  groups:[{h:"Vælg én", ex:[
+    {n:"Løbeprogram 1, 2 eller 3", d:["ca. 50 min"], t:"Find programmet på den dag i ugen, hvor det ligger — indholdet er det samme."},
+    {n:"…eller Styrkeprogram 2", d:["ca. 90 min"], t:"Se tirsdagens program."}]}]};
+PROGRAMS.loeblet = { title:"Let valgfrit løb", sub:"Dagen før mødedag · ca. 30–40 min",
+  note:"Sidste selvtræning før Akademiet. Hold det let — ingen maxpuls i dag.",
+  groups:[{h:"Løb", ex:[
+    {n:"Let løb i roligt tempo", d:["30–40 min"], t:"Snakketempo. Slut af med 4–5 korte, lette stigningsløb hvis benene har det godt."}]}]};
+
+const WD = ["Søndag","Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag"];
+const MD = ["januar","februar","marts","april","maj","juni","juli","august"];
+
+/* ---------------- helpers ---------------- */
+const $ = s => document.querySelector(s);
+function dayLabel(iso){
+  const dt = new Date(iso+"T12:00:00");
+  return {wd:WD[dt.getDay()], nice:`${WD[dt.getDay()]} ${dt.getDate()}. ${MD[dt.getMonth()]}`, num:dt.getDate()};
+}
+function keysFor(day){
+  const ks=[];
+  day.blocks.filter(b=>!PROGRAMS[b].ref).forEach(b => PROGRAMS[b].groups.forEach((g,gi) =>
+    g.ex.forEach((e,ei)=>ks.push(`tt2026-${day.d}-${b}-${gi}-${ei}`))));
+  return ks;
+}
+function dayProgress(day){
+  const ks = keysFor(day);
+  if(!ks.length) return {n:0,t:0};
+  return {n:ks.filter(k=>store.get(k)==="1").length, t:ks.length};
+}
+
+/* ---------------- render dag-chips ---------------- */
+let selected = null;
+let view = "day";
+const todayIso = new Date().toISOString().slice(0,10);
+
+function renderChips(){
+  const c = $("#days"); c.innerHTML="";
+  let lastW = null;
+  DAYS.forEach(day=>{
+    if(day.w!==lastW){
+      const w=document.createElement("div"); w.className="wk"; w.textContent="Uge "+day.w;
+      c.appendChild(w); lastW=day.w;
+    }
+    const l = dayLabel(day.d);
+    const b = document.createElement("button");
+    const p = dayProgress(day);
+    b.className = "chip "+(day.free && !day.blocks.length ? "free" : day.free ? "free" : "train")
+      + (day.d===selected ? " active":"") + (day.d===todayIso ? " today":"")
+      + (p.t>0 && p.n===p.t ? " done":"");
+    b.innerHTML = `<div class="d">${l.wd.slice(0,3)}</div><div class="n">${l.num}</div><div class="dot"></div>`;
+    b.setAttribute("aria-label", l.nice + (day.d===todayIso?" (i dag)":""));
+    b.onclick = ()=>{ selected=day.d; view="day"; render(); };
+    c.appendChild(b);
+  });
+  const act = c.querySelector(".chip.active");
+  if(act) act.scrollIntoView({inline:"center", block:"nearest"});
+}
+
+/* ---------------- render dag ---------------- */
+function renderDay(){
+  const m = $("#main");
+  const day = DAYS.find(x=>x.d===selected);
+  if(!day){
+    const before = todayIso < DAYS[0].d;
+    m.innerHTML = `<div class="rest ${before?"":"camp"}">
+      <div class="big">${before?"Programmet starter mandag 6. juli":"Camp er i gang!"}</div>
+      <p>${before?"Vælg en dag i toppen for at kigge programmet igennem.":"Pre-season er gennemført — nu tager Akademiet over. Godt kæmpet! 💪"}</p></div>`;
+    return;
+  }
+  const l = dayLabel(day.d);
+  const isToday = day.d===todayIso;
+  let html = `<div class="dayhead"><h2>${isToday?"I dag · ":""}${l.nice}</h2>
+    <span class="tag ${day.free?"free":""}">${day.free ? (day.camp?"Mødedag":"Fridag") : "Uge "+day.w}</span></div>`;
+
+  if(!day.blocks.length){
+    html += `<div class="rest ${day.camp?"camp":""}"><div class="big">${day.rest}</div><p>${day.restp}</p></div>`;
+    m.innerHTML = html; return;
+  }
+
+  const p = dayProgress(day);
+  const nReal = day.blocks.filter(b=>!PROGRAMS[b].ref).length;
+  html += `<div class="meta">${nReal} ${nReal===1?"program":"programmer"} · ${day.time}${day.ff?` · Fast feet ${day.ff} i denne uge`:""}</div>`;
+  html += `<div class="dprow" id="dprow"><span>Dagens fremgang</span><b id="daycount"></b></div>
+    <div class="progress"><i id="pbar"></i></div>`;
+
+  let num = 0;
+  day.blocks.forEach((bId, bi)=>{
+    const P = PROGRAMS[bId];
+    const isRef = !!P.ref;
+    if(!isRef) num++;
+    const open = false;
+    let inner = P.note ? `<div class="note">${P.note}</div>` : "";
+    P.groups.forEach((g,gi)=>{
+      inner += `<div class="exgroup"><div class="gh">${g.h}</div>`;
+      g.ex.forEach((e,ei)=>{
+        const key = `tt2026-${day.d}-${bId}-${gi}-${ei}`;
+        const checked = !isRef && store.get(key)==="1";
+        const cbHtml = isRef ? "" : `<button class="cb" role="checkbox" aria-checked="${checked}" aria-label="Fuldført: ${e.n}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#14100B" stroke-width="3.4"
+              stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></button>`;
+        inner += `<div class="ex ${checked?"checked":""}" ${isRef?"":`data-key="${key}"`}>
+          ${cbHtml}<div class="xt"><div class="name">${e.n}</div>
+            <div>${(e.d||[]).map((x,i)=>`<span class="dose ${i>0?"alt":""}">${x}</span>`).join("")}</div>
+            ${e.t?`<div class="desc">${e.t}</div>`:""}${e.v?yt(e.v):""}</div></div>`;
+      });
+      inner += `</div>`;
+    });
+    html += `<section class="block ${open?"open":""}" data-block="${bId}" ${isRef?'data-ref="1"':''}>
+      <button class="bhead" aria-expanded="${open}">
+        <span class="puck">${isRef?"i":num}</span>
+        <span class="bt"><span class="t">${P.title}</span><br><span class="s">${P.sub}</span></span>
+        ${isRef?"":`<span class="bcount"></span>`}
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>${isRef?"":`<div class="bprog"><i></i></div>`}<div class="bbody">${inner}</div></section>`;
+  });
+
+  m.innerHTML = html;
+  updateProgress(day);
+
+  m.querySelectorAll(".bhead").forEach(h=>h.onclick=()=>{
+    const blk = h.closest(".block");
+    blk.classList.toggle("open");
+    h.setAttribute("aria-expanded", blk.classList.contains("open"));
+  });
+  m.querySelectorAll(".ex .cb").forEach(cb=>cb.onclick=()=>{
+    const ex = cb.closest(".ex"), key = ex.dataset.key;
+    const now = !(store.get(key)==="1");
+    store.set(key, now?"1":"0");
+    ex.classList.toggle("checked", now);
+    cb.setAttribute("aria-checked", now);
+    updateProgress(day);
+    markBlockDone(ex.closest(".block"), day);
+    renderChipsDoneState();
+  });
+  m.querySelectorAll(".block:not([data-ref])").forEach(b=>markBlockDone(b, day));
+}
+
+function markBlockDone(blockEl, day){
+  if(blockEl.dataset.ref) return;
+  const done = [...blockEl.querySelectorAll(".ex")].every(e=>e.classList.contains("checked"));
+  blockEl.classList.toggle("done", done);
+  const puck = blockEl.querySelector(".puck");
+  if(done) puck.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 12.5l5 5L20 6.5"/></svg>`;
+  else puck.textContent = [...blockEl.parentNode.querySelectorAll(".block:not([data-ref])")].indexOf(blockEl)+1;
+}
+function blockProgress(day, bId){
+  let n=0, t=0;
+  PROGRAMS[bId].groups.forEach((g,gi)=>g.ex.forEach((e,ei)=>{
+    t++;
+    if(store.get(`tt2026-${day.d}-${bId}-${gi}-${ei}`)==="1") n++;
+  }));
+  return {n, t};
+}
+function updateProgress(day){
+  const p = dayProgress(day), bar = $("#pbar");
+  if(bar) bar.style.width = (p.t? Math.round(100*p.n/p.t):0)+"%";
+  const dc = $("#daycount"), row = $("#dprow");
+  if(dc){ dc.textContent = `${p.n} / ${p.t} øvelser`;
+    if(row) row.classList.toggle("alldone", p.t>0 && p.n===p.t); }
+  document.querySelectorAll(".block:not([data-ref])").forEach(blk=>{
+    const bp = blockProgress(day, blk.dataset.block);
+    const c = blk.querySelector(".bcount");
+    if(c) c.textContent = `${bp.n}/${bp.t}`;
+    const bi = blk.querySelector(".bprog i");
+    if(bi) bi.style.width = (bp.t? Math.round(100*bp.n/bp.t):0)+"%";
+  });
+}
+function renderChipsDoneState(){
+  /* let genrender af chips uden scroll-jump */
+  const c = $("#days");
+  let i=0;
+  DAYS.forEach(day=>{
+    while(c.children[i] && c.children[i].classList.contains("wk")) i++;
+    const chip = c.children[i++]; if(!chip) return;
+    const p = dayProgress(day);
+    chip.classList.toggle("done", p.t>0 && p.n===p.t);
+  });
+}
+
+/* ---------------- init ---------------- */
+DAYS.forEach(d=>{
+  if(d.blocks.some(b=>/^loeb|^fastfeet/.test(b))) d.blocks.unshift("opvarm");
+});
+function pickDefault(){
+  if(DAYS.some(x=>x.d===todayIso)) return todayIso;
+  if(todayIso < DAYS[0].d) return DAYS[0].d;
+  return null; // efter 26/7 → camp-skærm
+}
+function renderOverview(){
+  const m = $("#main");
+  const wdS = ["SØN","MAN","TIR","ONS","TOR","FRE","LØR"];
+  let tot = {n:0, t:0};
+  const weeks = [...new Set(DAYS.map(d=>d.w))];
+  let html = "";
+  weeks.forEach(w=>{
+    let wp = {n:0, t:0}, cells = "";
+    DAYS.filter(d=>d.w===w).forEach(day=>{
+      const l = dayLabel(day.d);
+      const dt = new Date(day.d+"T12:00:00");
+      const p = dayProgress(day);
+      wp.n+=p.n; wp.t+=p.t;
+      let cls="", pc="";
+      if(!p.t){ cls="rest"; pc = day.camp ? "Camp" : "Fri"; }
+      else if(p.n===p.t){ cls="full"; pc="100 %"; }
+      else if(p.n>0){ cls="part"; pc=Math.round(100*p.n/p.t)+" %"; }
+      else pc = "–";
+      if(day.d===todayIso) cls+=" today";
+      cells += `<button class="ovday ${cls}" data-goto="${day.d}"
+        aria-label="${l.nice}: ${p.t? p.n+" af "+p.t+" øvelser":"fridag"}">
+        <span class="w">${wdS[dt.getDay()]}</span><span class="n">${dt.getDate()}</span>
+        <span class="pc">${pc}</span></button>`;
+    });
+    tot.n+=wp.n; tot.t+=wp.t;
+    const pct = wp.t? Math.round(100*wp.n/wp.t):0;
+    html += `<div class="ovcard"><div class="ovhead"><span class="t">Uge ${w}</span>
+      <span class="p">${wp.n} / ${wp.t} øvelser</span></div>
+      <div class="ovbar"><i style="width:${pct}%"></i></div>
+      <div class="ovgrid">${cells}</div></div>`;
+  });
+  const tpct = tot.t? Math.round(100*tot.n/tot.t):0;
+  m.innerHTML = `<div class="dayhead"><h2>Ugeoverblik</h2>
+      <span class="tag">Pre-season</span></div>
+    <div class="ovcard total"><div class="ovhead"><span class="t">Hele perioden</span>
+      <span class="p">${tpct} %</span></div>
+      <div class="ovbar"><i style="width:${tpct}%"></i></div>
+      <div class="ovhint" style="margin:0">${tot.n} af ${tot.t} øvelser fuldført · gemt lokalt på denne telefon</div></div>`
+    + html + `<div class="ovhint">Tryk på en dag for at hoppe direkte til den.</div>`;
+  m.querySelectorAll("[data-goto]").forEach(b=>b.onclick=()=>{
+    selected = b.dataset.goto; view="day"; render();
+    window.scrollTo({top:0});
+  });
+}
+
+function render(){
+  renderChips();
+  if(view==="ov") renderOverview(); else renderDay();
+  const tg = $("#ovtoggle");
+  tg.textContent = view==="ov" ? "Tilbage til dagen" : "Se ugeoverblik";
+  tg.setAttribute("aria-pressed", view==="ov");
+}
+$("#ovtoggle").onclick = ()=>{ view = view==="ov" ? "day":"ov"; render(); };
+document.addEventListener("click", ev=>{
+  const btn = ev.target.closest("button.vid[data-yt]");
+  if(!btn) return;
+  const id = btn.dataset.yt, st = +btn.dataset.start;
+  const watchUrl = `https://www.youtube.com/watch?v=${id}${st>0?`&t=${st}s`:""}`;
+  // Åbnet direkte fra fil (mail/AirDrop): embeds afvises af YouTube (fejl 153,
+  // manglende referrer) — åbn i stedet videoen i YouTube.
+  if(location.protocol === "file:"){ window.open(watchUrl, "_blank"); return; }
+  const slot = btn.nextElementSibling;
+  if(slot.firstChild){
+    slot.innerHTML = "";
+    btn.setAttribute("aria-expanded","false");
+    btn.innerHTML = YTICON + "Se video";
+  }else{
+    slot.innerHTML = `<div class="ytwrap"><iframe
+      src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0${st>0?`&start=${st}`:""}"
+      title="Øvelsesvideo" referrerpolicy="strict-origin-when-cross-origin"
+      allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+      allowfullscreen></iframe></div>
+      <a class="ytext" href="${watchUrl}" target="_blank" rel="noopener">Virker videoen ikke? Åbn i YouTube</a>`;
+    btn.setAttribute("aria-expanded","true");
+    btn.innerHTML = YTICON + "Skjul video";
+  }
+});
+
+selected = pickDefault();
+render();
+</script>
+</body>
+</html>
