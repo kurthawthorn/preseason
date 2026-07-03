@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0F1420">
+<title>Sådan får du Pre-Season appen · Guide</title>
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0F1420; --surface:#182031; --surface2:#202B41; --line:#2B3852;
+  --orange:#FF7A1F; --orange-soft:rgba(255,122,31,.14);
+  --blue:#5B8DEF; --green:#3ECF7A;
+  --text:#EDF1F8; --muted:#93A0B8; --faint:#6B7890;
+  --disp:"Barlow Condensed",-apple-system,sans-serif;
+  --body:"Barlow",-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--body);
+  font-size:16px;line-height:1.5;padding:22px 18px 50px;max-width:680px;margin:0 auto}
+.eyebrow{font-family:var(--disp);font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;font-size:13px;color:var(--orange)}
+h1{font-family:var(--disp);font-weight:800;font-size:32px;line-height:1.05;
+  text-transform:uppercase;margin-bottom:4px}
+.sub{color:var(--muted);font-size:15px;margin-bottom:18px}
+.urlbox{display:flex;flex-wrap:wrap;gap:16px;align-items:center;
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:16px;margin-bottom:22px}
+.urlbox img{width:130px;height:130px;border-radius:10px;flex:0 0 auto}
+.urlbox .t{flex:1;min-width:200px}
+.urlbox .lbl{font-family:var(--disp);font-weight:700;font-size:13px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.urlbox a{display:inline-block;font-weight:700;font-size:17px;color:var(--blue);
+  word-break:break-all;text-decoration:none;margin:4px 0 8px}
+.urlbox p{color:var(--muted);font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:16px;margin-bottom:14px}
+.card h2{font-family:var(--disp);font-weight:800;font-size:22px;
+  text-transform:uppercase;letter-spacing:.02em;display:flex;align-items:center;gap:10px}
+.card h2 .os{font-family:var(--disp);font-weight:700;font-size:12px;
+  letter-spacing:.1em;color:var(--orange);background:var(--orange-soft);
+  border-radius:999px;padding:3px 10px}
+.card .brow{color:var(--faint);font-size:13.5px;margin:2px 0 10px}
+ol{list-style:none;counter-reset:step}
+ol li{counter-increment:step;display:flex;gap:12px;padding:9px 0;
+  border-bottom:1px solid var(--line);font-size:15.5px}
+ol li:last-child{border-bottom:none}
+ol li::before{content:counter(step);flex:0 0 26px;height:26px;border-radius:50%;
+  background:var(--orange-soft);color:var(--orange);font-family:var(--disp);
+  font-weight:800;font-size:14px;display:grid;place-items:center;margin-top:1px}
+ol li b{color:var(--text)}
+ol li{color:var(--muted)}
+.key{display:inline-block;background:var(--surface2);border:1px solid var(--line);
+  border-radius:6px;padding:0 7px;font-weight:600;color:var(--text);font-size:14px;white-space:nowrap}
+.tip{background:var(--surface2);border-radius:10px;padding:10px 12px;
+  font-size:14px;color:var(--muted);margin-top:10px}
+.tip b{color:var(--text)}
+.tip.warn{border-left:3px solid var(--orange)}
+footer{color:var(--faint);font-size:13px;text-align:center;margin-top:24px}
+@media print{
+  body{background:#fff;color:#111}
+  .card,.urlbox{border-color:#ccc;background:#fff}
+  ol li,.urlbox p,.card .brow,.tip{color:#333}
+  .urlbox a{color:#0645ad}
+}
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Mors-Thy Håndbold Akademi</div>
+<h1>Sådan får du Pre-Season appen</h1>
+<div class="sub">Træningsprogrammet for uge 28–30 ligger som en web-app. Den virker på alt med en browser — men lægger du den på hjemmeskærmen, opfører den sig som en rigtig app.</div>
+
+<div class="urlbox">
+  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUoAAAFKCAIAAAD0S4FSAAAGRElEQVR4nO3dMW5kNxBAQcvQSezE9z+NE/sGCpQpdLqBQHiXIpr/qSqfma8ZPTBpNF/e3j9+A4p+n34A4BR5Q5a8IUvekCVvyJI3ZMkbsuQNWfKGLHlDlrwhS96QJW/IkjdkyRuy5A1Z8oYseUOWvCHrdefFf/z511c9xyX+/efvX37t+ttYv/PON/nEd9753DX/kz9yekOWvCFL3pAlb8iSN2TJG7LkDVnyhix5Q9bW1NrazrTNOTtTTTtzaWt3TstNTbzd+T2fc27SzukNWfKGLHlDlrwhS96QJW/IkjdkyRuy5A1ZB6fW1u7c1LXzzlNbvnpTXFNP9cT/yTWnN2TJG7LkDVnyhix5Q5a8IUvekCVvyJI3ZI1NrX03U7dentuXdu5z+SpOb8iSN2TJG7LkDVnyhix5Q5a8IUvekCVvyDK19hPOTWJNbfnqfS4/cnpDlrwhS96QJW/IkjdkyRuy5A1Z8oYseUPW2NTanXdTrp2bxLrz2/hus2V3/go7nN6QJW/IkjdkyRuy5A1Z8oYseUOWvCFL3pB1cGqtN/O0/ot2Ztq89qteu9b7n1xzekOWvCFL3pAlb8iSN2TJG7LkDVnyhix5Q9bL2/vH9DNEPHEi6twE2J3v/N04vSFL3pAlb8iSN2TJG7LkDVnyhix5Q5a8IWtr19oTd3Gdm4iamqZ64ozXnRN+vTk8pzdkyRuy5A1Z8oYseUOWvCFL3pAlb8iSN2Qd3LW2M5l054TQnTdXnpt5unMezv/V/+f0hix5Q5a8IUvekCVvyJI3ZMkbsuQNWfKGrK2ptamNWTvb1O783DtnnnbcuQ9v7dwz7zC1BnxC3pAlb8iSN2TJG7LkDVnyhix5Q5a8IWts19qdc1q9d57S2zy3ww2hwBeTN2TJG7LkDVnyhix5Q5a8IUvekCVvyAreELr2xOmxqc1k537BJ07aTW1is2sN+IS8IUvekCVvyJI3ZMkbsuQNWfKGLHlD1uvOi++cPVo7N5k0teWrt13szts2z33uub/X6Q1Z8oYseUOWvCFL3pAlb8iSN2TJG7LkDVlbU2s7nrjVbO3OGb5zc1rfbQJsx9RTOb0hS96QJW/IkjdkyRuy5A1Z8oYseUOWvCFrbGrtzsmzc5975z2ea1O3Xu58G1O/wo5zn+v0hix5Q5a8IUvekCVvyJI3ZMkbsuQNWfKGrK2ptamppp13ntp6NTURNTWnde6d79ymtuPcb+T0hix5Q5a8IUvekCVvyJI3ZMkbsuQNWfKGrIO71nr7w6Ymsc5tJlubmg/b+Tae+Aue+56d3pAlb8iSN2TJG7LkDVnyhix5Q5a8IUvekPXy9v7xyy++877FtTs3wE2989qdt7g+cVve1C/o9IYseUOWvCFL3pAlb8iSN2TJG7LkDVnyhqytqbW1O29yfOK81JSprWZ37lq786nWnN6QJW/IkjdkyRuy5A1Z8oYseUOWvCFL3pA1tmttarpo7dwzP/G1a2b47uf0hix5Q5a8IUvekCVvyJI3ZMkbsuQNWfKGrIO71nruvDHznDsn3s59V+emA3e4IRT4hLwhS96QJW/IkjdkyRuy5A1Z8oYseUPW686Le9u21hNCd25EOzdbduetl2tPvCH0HKc3ZMkbsuQNWfKGLHlDlrwhS96QJW/IkjdkbU2trT1xf9gTTe0e23FuxuvO/7qpp3J6Q5a8IUvekCVvyJI3ZMkbsuQNWfKGLHlD1sGptbU7b1Rcm9q2dedNnVOmnvnOebg1pzdkyRuy5A1Z8oYseUOWvCFL3pAlb8iSN2SNTa090Z23fO68tneP545zk4U7dr4NpzdkyRuy5A1Z8oYseUOWvCFL3pAlb8iSN2SZWvsJU1NNd854rU3th7Px7kdOb8iSN2TJG7LkDVnyhix5Q5a8IUvekCVvyBqbWrtz1mrt3ETUzueuTc14re288863cW5r3drU3KHTG7LkDVnyhix5Q5a8IUvekCVvyJI3ZMkbsg5OrZ2beZpy5x2gO6Ym7ab+ou92X6rTG7LkDVnyhix5Q5a8IUvekCVvyJI3ZMkbsl7e3j+mnwE4wukNWfKGLHlDlrwhS96QJW/IkjdkyRuy5A1Z8oYseUOWvCFL3pAlb8iSN2TJG7LkDVnyhix5Q9Z/ijI/Tk4SQpAAAAAASUVORK5CYII=" alt="QR-kode til appen">
+  <div class="t">
+    <span class="lbl">Adressen</span><br>
+    <a href="https://kurthawthorn.github.io/preseason/">kurthawthorn.github.io/preseason</a>
+    <p>Scan QR-koden med telefonens kamera, eller skriv adressen i browseren.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>iPhone / iPad <span class="os">Safari</span></h2>
+  <div class="brow">Skal gøres i Safari — det virker ikke fra Chrome på iPhone.</div>
+  <ol>
+    <li><span>Åbn adressen i <b>Safari</b> (scan QR-koden med kameraet).</span></li>
+    <li><span>Tryk på <b>Del-knappen</b> <span class="key">firkant med pil op</span> nederst midt på skærmen.</span></li>
+    <li><span>Scroll ned og vælg <b>"Føj til hjemmeskærm"</b>.</span></li>
+    <li><span>Tryk <b>Tilføj</b> — appen ligger nu på hjemmeskærmen med orange håndbold-ikon.</span></li>
+  </ol>
+  <div class="tip warn"><b>Vigtigt:</b> Brug altid appen fra hjemmeskærmen. Dine flueben gemmes lokalt i den — hakker du af i en almindelig Safari-fane i stedet, følger de ikke med over.</div>
+</div>
+
+<div class="card">
+  <h2>Android <span class="os">Chrome</span></h2>
+  <div class="brow">Chrome er standard på de fleste Android-telefoner.</div>
+  <ol>
+    <li><span>Åbn adressen i <b>Chrome</b> (scan QR-koden med kameraet).</span></li>
+    <li><span>Tryk på <b>menuen</b> <span class="key">⋮ tre prikker</span> øverst til højre.</span></li>
+    <li><span>Vælg <b>"Føj til startskærm"</b> (hedder på nogle telefoner "Installér app" eller "Tilføj til startskærm").</span></li>
+    <li><span>Tryk <b>Tilføj</b> / <b>Installér</b> — færdig.</span></li>
+  </ol>
+  <div class="tip">Bruger du <b>Samsung Internet</b>: tryk på menuen <span class="key">≡</span> nederst → <b>"Tilføj side til"</b> → <b>Startskærm</b>.</div>
+</div>
+
+<div class="card">
+  <h2>PC / Mac <span class="os">Browser</span></h2>
+  <div class="brow">På computer er det nemmeste bare at åbne adressen — men den kan også installeres som app.</div>
+  <ol>
+    <li><span>Åbn adressen i <b>Chrome</b> eller <b>Edge</b>.</span></li>
+    <li><span><b>Chrome:</b> klik på <b>installations-ikonet</b> <span class="key">skærm med pil</span> yderst til højre i adresselinjen → <b>Installér</b>.</span></li>
+    <li><span><b>Edge:</b> menuen <span class="key">…</span> → <b>Apps</b> → <b>"Installer dette websted som en app"</b>.</span></li>
+    <li><span>Appen åbner nu i sit eget vindue og ligger i Start-menuen / Dock.</span></li>
+  </ol>
+  <div class="tip">Alternativt: gem den bare som bogmærke <span class="key">Ctrl/Cmd + D</span>.</div>
+</div>
+
+<div class="card">
+  <h2>Godt at vide</h2>
+  <ol>
+    <li><span>Fluebenene gemmes <b>pr. enhed</b> — telefon og PC deler ikke fremgang. Vælg én enhed at hakke af på (telefonen er oplagt).</span></li>
+    <li><span>Appen viser automatisk <b>dagens program</b> ud fra datoen. Brug pilene i toppen til at se andre dage, og "Se ugeoverblik" til fremgangen for hele perioden.</span></li>
+    <li><span>Videoerne kræver internet — dårlig dækning i hallen? Se dem hjemmefra først.</span></li>
+  </ol>
+</div>
+
+<footer>Pre-Season uge 28–30 · 2026 · Mors-Thy Håndbold Akademi</footer>
+</body>
+</html>
